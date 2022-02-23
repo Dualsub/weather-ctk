@@ -1,41 +1,115 @@
-import React from 'react'
+import { CircularProgress } from '@mui/material'
+import React, { useEffect, useState } from 'react'
 import ForecastCard from './ForecastCard'
+import { getWeatherType, weatherMeta } from '../WeatherTypes'
 
-const mockData = [
-    {
-        temp: 23,
-        day: "Söndag",
-        date: "2/3"
-    },
-    {
-        temp: 21,
-        day: "Måndag",
-        date: "3/3"
-    },
-    {
-        temp: 18,
-        day: "Tisdag",
-        date: "4/3"
-    },
-    {
-        temp: 17,
-        day: "Onsdag",
-        date: "4/3"
-    },
-    {
-        temp: 20,
-        day: "Torsdag",
-        date: "4/3"
-    }
+const DAYS = [
+    'Söndag',
+    'Mondag',
+    'Tisdag',
+    'Onsdag',
+    'Torsdag',
+    'Fredag',
+    'Lördag'
 ]
 
-const WeekForecast = () => {
-  return (
-    <div className='flex flex-col items-center'>
-        <h2 className='my-6 text-3xl font-thin'>5-dagars prognos</h2>
-        <div className='flex flex-row'>
-        {mockData.map((dayData) => (
-            <ForecastCard {...dayData} />
+const MONTHS = [
+    'Januari',
+    'Februari',
+    'Mars',
+    'April',
+    'Maj',
+    'Juni',
+    'Juli',
+    'Augusti',
+    'September',
+    'Oktober',
+    'November',
+    'December'
+]
+
+const NUM_FORECAST_DAYS = 5
+
+const WeekForecast = ({ city }) => {
+    
+    const [forecastData, setForecastData] = useState(null)
+    // const [hasError, setHasError] = useState(false)
+    let hasError = false
+    const setHasError = (b) => { hasError = b };
+
+    const [isLoading, setLoading] = useState(false)
+
+    // Here we do the api call to the weather api.
+    useEffect(() => {
+        const fetchData = async () => {
+            setLoading(true)
+            
+            try {
+                const url = `https://api.openweathermap.org/data/2.5/onecall?lat=${city.lat}&lon=${city.lon}&units=metric&exclude=current,minutely,hourly,alerts&appid=be70debc4ee8978171c5658f48c475d8` 
+                console.log(url);
+                const response = await fetch(url)
+                const data = await response.json()
+                setForecastData(data)    
+            } catch (error) {
+                setHasError(true)
+                console.log(error);
+            }
+                
+            setLoading(false)
+        }
+
+        fetchData()
+        .catch((error) => {
+            setHasError(true)
+            console.log(error);    
+        });
+    }, [city])
+  
+    // Hear we clean the data for the ForecastCard component to use.
+    console.log(forecastData);
+    // forecastData.daily.map((rawDayData) => console.log(rawDayData.dt)) 
+
+    
+    let cleanedForecastData = null
+
+    try {
+        cleanedForecastData = forecastData.daily.slice(0, NUM_FORECAST_DAYS).map((rawDayData) => {
+            
+            const dateObj = new Date(parseInt(rawDayData["dt"] * 1000))
+            const temp = rawDayData["temp"]["day"]
+            const windSpeed = rawDayData["wind_speed"]
+            const windAngle = rawDayData["wind_deg"]
+            const weatherID = getWeatherType(rawDayData["weather"]);
+
+            return {
+                day: DAYS[dateObj.getDay()],
+                date: `${dateObj.getDate()} ${MONTHS[dateObj.getMonth()]}`,
+                temp: temp,
+                windSpeed: windSpeed,
+                windAngle: windAngle,
+                weatherType: weatherID
+            }
+        })
+          
+    } catch (error) {
+        setHasError(true)
+        console.log(error);   
+    }
+  
+    console.log(cleanedForecastData);
+
+    if(isLoading)
+        return <CircularProgress className="self-center"/>
+
+    if(hasError)
+        return <div>Lyckades inte hämta prognosen.</div>
+
+    return (
+    <div className='flex flex-col items-center w-full rounded-lg bg-white shadow-lg p-6'>
+        <h2 className='mb-6 mt-2 text-3xl font-nomral text-gray-600'>5-dagarsprognos</h2>
+        <div className='flex flex-row w-full justify-between'>
+        {cleanedForecastData && cleanedForecastData.map((dayData, index) => (
+            <ForecastCard key={index} {...dayData} />
         ))}
         </div>
     </div>
