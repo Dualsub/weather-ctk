@@ -2,10 +2,11 @@ import { CircularProgress } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import ForecastCard from './ForecastCard'
 import { getWeatherType, weatherMeta } from '../WeatherTypes'
+import DateRangeIcon from '@mui/icons-material/DateRange';
 
 const DAYS = [
     'Söndag',
-    'Mondag',
+    'Måndag',
     'Tisdag',
     'Onsdag',
     'Torsdag',
@@ -73,7 +74,7 @@ const WeekForecast = ({ city }) => {
     let cleanedForecastData = null
 
     try {
-        cleanedForecastData = forecastData.daily.slice(0, NUM_FORECAST_DAYS).map((rawDayData) => {
+        cleanedForecastData = forecastData.daily.slice(1, NUM_FORECAST_DAYS+1).map((rawDayData) => {
             
             const dateObj = new Date(parseInt(rawDayData["dt"] * 1000))
             const temp = rawDayData["temp"]["day"]
@@ -98,19 +99,19 @@ const WeekForecast = ({ city }) => {
   
     console.log(cleanedForecastData);
 
-    if(isLoading)
-        return <CircularProgress className="self-center"/>
-
     if(hasError)
         return <div>Lyckades inte hämta prognosen.</div>
 
     return (
     <div className='flex flex-col items-center w-full rounded-lg bg-white shadow-lg p-6'>
-        <h2 className='mb-6 mt-2 text-3xl font-nomral text-gray-600'>5-dagarsprognos</h2>
-        <div className='flex flex-row w-full justify-between'>
-        {cleanedForecastData && cleanedForecastData.map((dayData, index) => (
+        <h2 className='mb-6 mt-2 text-2xl font-medium text-gray-600'>
+            <DateRangeIcon className='mx-4'/>
+            {NUM_FORECAST_DAYS}-dagarsprognos
+        </h2>
+        <div className='flex flex-row overflow-x-scroll overflow-y-hidden lg:overflow-visible w-full justify-between'>
+        {cleanedForecastData ? cleanedForecastData.map((dayData, index) => (
             <ForecastCard key={index} {...dayData} />
-        ))}
+        )) : <CircularProgress className="self-center"/>}
         </div>
     </div>
   )

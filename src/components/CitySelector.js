@@ -5,7 +5,7 @@ import { cities } from '../cities'
 const CitySelector = ({ city, setCity }) => {
   
     return (
-    <div className='flex bg-white rounded-md flex-col w-full mt-4'>
+    <div className='flex bg-white rounded-md flex-col w-full mt-8 mb-4'>
         <Autocomplete
         className='w-full'
         id="city-selector"
