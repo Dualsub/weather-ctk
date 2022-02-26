@@ -7,6 +7,7 @@ import WbSunnyIcon from '@mui/icons-material/WbSunny';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { getWeatherData } from '../WeatherTypes';
 import Visibility from '@mui/icons-material/Visibility';
+import CloudIcon from '@mui/icons-material/Cloud';
 
 const formatTime = (date) => {
     return `${date.getHours().toString()}:${date.getMinutes() < 10 ? "0"+ date.getMinutes().toString() : date.getMinutes().toString()}`;
@@ -31,7 +32,7 @@ const InfoTable = ({ windSpeed, windAngle, sunrise, sunset, minTemp, maxTemp, fe
         <InfoCard 
         title={(
         <div>
-            <AirIcon />
+            <CloudIcon />
             Väder
         </div>
         )}
@@ -120,6 +121,18 @@ const InfoTable = ({ windSpeed, windAngle, sunrise, sunset, minTemp, maxTemp, fe
         content={(
             <div className='w-full flex justify-center items-center'>
                 <h1 className='text-2xl mt-6'>{visibility ? visibility : 0} km</h1>
+            </div>
+        )}/>
+        <InfoCard 
+        title={(
+            <div>
+            <WbSunnyIcon className='mx-1'/>
+            Vet ej
+            </div>
+        )}
+        content={(
+            <div className='w-full flex justify-center items-center'>
+                <h1 className='text-2xl mt-6'>Vet ej</h1>
             </div>
         )}/>
       </div>

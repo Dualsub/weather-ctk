@@ -108,7 +108,7 @@ const WeekForecast = ({ city }) => {
             <DateRangeIcon className='mx-4'/>
             {NUM_FORECAST_DAYS}-dagarsprognos
         </h2>
-        <div className='flex flex-row overflow-x-scroll overflow-y-hidden lg:overflow-visible w-full justify-between'>
+        <div className='flex lg:flex-row flex-col overflow-x-scroll overflow-y-hidden lg:overflow-visible w-full justify-between'>
         {cleanedForecastData ? cleanedForecastData.map((dayData, index) => (
             <ForecastCard key={index} {...dayData} />
         )) : <CircularProgress className="self-center"/>}

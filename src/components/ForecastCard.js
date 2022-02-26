@@ -17,7 +17,7 @@ const ForecastCard = ({ day, date, temp, windSpeed, windAngle, weatherType }) =>
     };
 
     return (
-    <div className={weather.bgColor + ' flex flex-row justify-between rounded-lg shadow-lg w-48 h-48 p-3 m-2 text-white transform transition-all duration-150 ease-out hover:scale-105 scale-100'}>
+    <div className={weather.bgColor + 'flex flex-row justify-between rounded-lg shadow-lg lg:w-48 lg:h-48 p-3 m-2 text-white transform transition-all duration-150 ease-out hover:scale-105 scale-100'}>
         <div className='flex flex-col justify-between w-full h-full'>
         <div className='flex flex-row justify-between'>
             <div className='flex flex-col'>
@@ -37,8 +37,7 @@ const ForecastCard = ({ day, date, temp, windSpeed, windAngle, weatherType }) =>
                 {weather.icon}
             </div>
         </div>
-
-            <div className='mt-auto mb-2 ml-2'>
+            <div className='mt-auto mb-2 ml-2 lg:self-start self-end'>
                 <p className='text-xl'>{day}</p>
                 <p className='text-xl'>{date}</p>
             </div>
