@@ -37,7 +37,7 @@ const ForecastCard = ({ day, date, temp, windSpeed, windAngle, weatherType }) =>
                 {weather.icon}
             </div>
         </div>
-            <div className='mt-auto mb-2 ml-2 lg:self-start self-end'>
+            <div className='mt-auto mb-2 mx-2 lg:self-start self-end'>
                 <p className='text-xl'>{day}</p>
                 <p className='text-xl'>{date}</p>
             </div>
