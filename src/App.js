@@ -8,22 +8,52 @@ import TodayForecast from "./components/TodayForecast";
 import CitySelector from "./components/CitySelector";
 import { cities } from "./cities";
 import Footer from "./components/Footer";
+import { getWeatherType, getWeatherData } from "./WeatherTypes";
 
 const DEFAULT_BACKGROUND = "bg-blue-600"
 
 function App() {
-  
   // The city that the weather is shown for.
   const [city, setCity] = useState(cities[0])
-  const [background, setBackground] = useState(DEFAULT_BACKGROUND)
-  console.log(background);
+  const [background, setBackground] = useState(getWeatherData(7).bgColor)  
+  const [rawData, setRawData] = useState(null)
+  const [hasError, setHasError] = useState(false)
+  const [isLoading, setLoading] = useState(false)
+
+  // Here we do the api call to the weather api.
+  useEffect(() => {
+      const fetchData = async () => {
+          setLoading(true)
+          
+          const url = `https://api.openweathermap.org/data/2.5/onecall?lat=${city.lat}&lon=${city.lon}&lang=sv&units=metric&exclude=minutely,alerts&appid=` + process.env.REACT_APP_API_KEY 
+          console.log(url);
+          const response = await fetch(url)
+          const data = await response.json()
+          setRawData(data)   
+          console.log(data); 
+          
+          const weatherType = getWeatherType(data.current.weather)
+          const weatherMeta = getWeatherData(weatherType)
+
+          setBackground(weatherMeta.bgColor)
+
+          setLoading(false)
+      }
+
+      fetchData()
+      .catch((error) => {
+          setHasError(true)
+          console.log(error);
+      });
+  }, [city])
+
   return (
     <div className={background + " min-w-full min-h-screen transition-all duration-150 ease-out"}>
       <div className="flex flex-col items-center h-full w-full max-w-6xl lg:mx-auto px-6">
         <div className="flex flex-col items-center w-full mt-4">
           <CitySelector city={city} setCity={setCity} />
-          <TodayForecast city={city} setBackground={setBackground}/>
-          <WeekForecast city={city}/>
+          <TodayForecast isLoading={isLoading} city={city} weatherData={rawData ? rawData.current : null}/>
+          <WeekForecast isLoading={isLoading} forecastData={rawData ? rawData.daily : null}/>
           <Footer />
         </div>
       </div>

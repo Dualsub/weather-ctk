@@ -2,108 +2,82 @@
  * Component that displays the weather currently in the specified city. Also changes background color of its parent component, App.
  */
 
-import React, { useState, useEffect } from 'react'
-import { weatherMeta, getWeatherType } from '../WeatherTypes';
+import React, { useState } from 'react'
+import { getWeatherDesc, getWeatherType } from '../WeatherTypes';
 import { CircularProgress } from '@mui/material';
-import InfoCard from './InfoCard';
 import InfoTable from './InfoTable';
+import Error from '@mui/icons-material/Error';
 
-const TodayForecast = ({city, day, wind, setBackground }) => {
+const tableDefaults = {
+  temp: 0, 
+  minTemp: 0, 
+  maxTemp: 0, 
+  feelTemp: 0,
+  windSpeed: 0, 
+  windAngle: 0,
+  sunrise: new Date(),
+  sunset: new Date(),
+  visibility: 0,
+  weatherDesc: "",
+  weatherType: 7,
+  humidity: 0
+}
 
-  const [weatherData, setWeatherData] = useState(null)
-  // const [hasError, setHasError] = useState(false)
-  let hasError = false
-  const setHasError = (b) => { hasError = b };
-  const [isLoading, setLoading] = useState(false)
+const TodayForecast = ({city, weatherData, isLoading }) => {
 
-  // Here we do the api call to the weather api.
-  useEffect(() => {
-      const fetchData = async () => {
-          setLoading(true)
-          
-          try {
-            const url = `https://api.openweathermap.org/data/2.5/weather?lat=${city.lat}&lon=${city.lon}&units=metric&appid=be70debc4ee8978171c5658f48c475d8` 
-            console.log(url);
-            const response = await fetch(url)
-            const data = await response.json()
-            setWeatherData(data)
+  const [hasError, setHasError] = useState(false)
 
-            // Set the background of the app.
-            const weatherType = getWeatherType(data.weather)
-            setBackground(weatherMeta[weatherType].bgColor)
-            console.log(data.weather);
-            console.log(weatherMeta[weatherType].bgColor, "backghrounsd");
-            
-
-          } catch (error) {
-              setHasError(true)
-              console.log(error);
-          }
-              
-          setLoading(false)
-      }
-
-      fetchData()
-      .catch((error) => {
-          setHasError(true)
-          console.log(error);    
-      });
-  }, [city, setBackground])
-
-  // Hear we clean the data for the ForecastCard component to use.
-  console.log(weatherData);
-  // forecastData.daily.map((rawDayData) => console.log(rawDayData.dt)) 
-
-  let cleanedWeatherData = null
-
-  try {
-    const weatherType = getWeatherType(weatherData["weather"])
+  
+  if(!weatherData && !isLoading)
+  {
     
-    cleanedWeatherData = {
-      weatherType: weatherType
-    }
-  } catch (error) {
-      setHasError(true)
-      console.log(error);   
+    return (
+      <div className='text-white w-full flex flex-col items-center justify-center my-8 h-96'>
+        <Error style={{fontSize:"60px"}}/>
+        <h1 className='text-2xl font-normal my-2'>
+        Det gick inte att hämta väder data.
+        </h1>
+    </div>
+    )
   }
+  
 
-  // if(isLoading)
-  //     return <CircularProgress className="self-center"/>
-
-  if(hasError)
-      return <div>Lyckades inte hämta prognosen.</div>
-
-    
+  const temp = weatherData ? Math.round(weatherData.temp) : 0
+  const weatherType = weatherData ? getWeatherType(weatherData.weather) : 7
+  
   // Here we prepare all the data that is needed for the info table
-  const tableData = {
-    temp: Math.round(weatherData.main.temp), 
-    minTemp: Math.round(weatherData.main.temp_min), 
-    maxTemp: Math.round(weatherData.main.temp_max), 
-    feelTemp: Math.round(weatherData.main.feels_like), 
+  const tableData = weatherData ? {
+    temp: temp, 
+    minTemp: 0, 
+    maxTemp: 0, 
+    feelTemp: Math.round(weatherData.feels_like), 
 
-    windSpeed: Math.round(weatherData.wind.speed), 
-    windAngle: Math.round(weatherData.wind.deg),
+    windSpeed: Math.round(weatherData.wind_speed), 
+    windAngle: Math.round(weatherData.wind_deg),
     
-    sunrise: new Date(weatherData.sys.sunrise * 1000),
-    sunset: new Date(weatherData.sys.sunset * 1000),
+    sunrise: new Date(weatherData.sunrise * 1000),
+    sunset: new Date(weatherData.sunset * 1000),
     
-    visibility: weatherData.visibility / 1000,
+    visibility: weatherData.visibility,
+    
+    weatherDesc: getWeatherDesc(weatherData.weather),
+    weatherType: weatherType,
 
-    weatherType: cleanedWeatherData.weatherType
-  }
+    humidity: weatherData.humidity
+  } : tableDefaults
 
   return (
-    <div className=' text-white w-full flex lg:flex-row flex-col items-center py-8 my-8'>
-      <div className='flex flex-col justify-between w-full mb-8 lg:m-0'>
+    <div className=' text-white w-full flex lg:flex-row flex-col items-center py-8 my-8 lg:justify-between'>
+      <div className='flex flex-col justify-between mb-8 lg:m-0 w-1/2'>
         <div className='m-2 flex flex-col items-center my-auto'>
           <h1 className='text-6xl font-medium my-2'>
-            {city ? city.name : <div className='animate-pulse'>...</div>}
+            {city && !isLoading ? city.name : <div className='animate-pulse'>...</div>}
           </h1>
           <h3 className='text-2xl font-normal my-2'>
-            {city && city.country}
+            {city && !isLoading ? city.country : ""}
           </h3>
           <h1 className='text-7xl font-medium my-4'>
-            {(weatherData && weatherData.main && weatherData.main.temp) ? Math.round(weatherData.main.temp) : 0}&deg;
+            {temp && !isLoading ? temp : 0}&deg;
           </h1>          
         </div>
         <div className='m-2'>

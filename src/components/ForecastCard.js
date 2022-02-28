@@ -4,9 +4,7 @@
 
 import React from 'react'
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
-import { getWeatherData, getWeatherType, weatherMeta } from '../WeatherTypes';
-// import { weatherMeta } from '../WeatherTypes';
-
+import { getWeatherData, getWeatherType } from '../WeatherTypes';
 
 const ForecastCard = ({ day, date, temp, windSpeed, windAngle, weatherType }) => {
 
@@ -17,7 +15,7 @@ const ForecastCard = ({ day, date, temp, windSpeed, windAngle, weatherType }) =>
     };
 
     return (
-    <div className={weather.bgColor + 'flex flex-row justify-between rounded-lg shadow-lg lg:w-48 lg:h-48 p-3 m-2 text-white transform transition-all duration-150 ease-out hover:scale-105 scale-100'}>
+    <div className={weather.bgColor + ' flex flex-row justify-between rounded-lg shadow-lg lg:w-48 lg:h-48 p-3 m-2 text-white transform transition-all duration-150 ease-out hover:scale-105 scale-100'}>
         <div className='flex flex-col justify-between w-full h-full'>
         <div className='flex flex-row justify-between'>
             <div className='flex flex-col'>

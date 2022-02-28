@@ -1,8 +1,9 @@
 import { CircularProgress } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import ForecastCard from './ForecastCard'
-import { getWeatherType, weatherMeta } from '../WeatherTypes'
+import { getWeatherType } from '../WeatherTypes'
 import DateRangeIcon from '@mui/icons-material/DateRange';
+import Error  from '@mui/icons-material/Error';
 
 const DAYS = [
     'Söndag',
@@ -31,55 +32,21 @@ const MONTHS = [
 
 const NUM_FORECAST_DAYS = 5
 
-const WeekForecast = ({ city }) => {
+const WeekForecast = ({ forecastData }) => {
     
-    const [forecastData, setForecastData] = useState(null)
-    // const [hasError, setHasError] = useState(false)
-    let hasError = false
-    const setHasError = (b) => { hasError = b };
-
+    const [hasError, setHasError] = useState(false)
     const [isLoading, setLoading] = useState(false)
 
-    // Here we do the api call to the weather api.
-    useEffect(() => {
-        const fetchData = async () => {
-            setLoading(true)
-            
-            try {
-                const url = `https://api.openweathermap.org/data/2.5/onecall?lat=${city.lat}&lon=${city.lon}&units=metric&exclude=current,minutely,hourly,alerts&appid=be70debc4ee8978171c5658f48c475d8` 
-                console.log(url);
-                const response = await fetch(url)
-                const data = await response.json()
-                setForecastData(data)    
-            } catch (error) {
-                setHasError(true)
-                console.log(error);
-            }
-                
-            setLoading(false)
-        }
-
-        fetchData()
-        .catch((error) => {
-            setHasError(true)
-            console.log(error);    
-        });
-    }, [city])
-  
-    // Hear we clean the data for the ForecastCard component to use.
-    console.log(forecastData);
-    // forecastData.daily.map((rawDayData) => console.log(rawDayData.dt)) 
-
-    
+    // Here we clean the data for the ForecastCard component to use.    
     let cleanedForecastData = null
 
     try {
-        cleanedForecastData = forecastData.daily.slice(1, NUM_FORECAST_DAYS+1).map((rawDayData) => {
+        cleanedForecastData = forecastData.slice(1, NUM_FORECAST_DAYS+1).map((rawDayData) => {
             
             const dateObj = new Date(parseInt(rawDayData["dt"] * 1000))
-            const temp = rawDayData["temp"]["day"]
-            const windSpeed = rawDayData["wind_speed"]
-            const windAngle = rawDayData["wind_deg"]
+            const temp = rawDayData.temp.day
+            const windSpeed = rawDayData.wind_speed
+            const windAngle = rawDayData.wind_deg
             const weatherID = getWeatherType(rawDayData["weather"]);
 
             return {
@@ -93,14 +60,8 @@ const WeekForecast = ({ city }) => {
         })
           
     } catch (error) {
-        setHasError(true)
-        console.log(error);   
+        // setHasError(true)
     }
-  
-    console.log(cleanedForecastData);
-
-    if(hasError)
-        return <div>Lyckades inte hämta prognosen.</div>
 
     return (
     <div className='flex flex-col items-center w-full rounded-lg bg-white shadow-lg p-6'>

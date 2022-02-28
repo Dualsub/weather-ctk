@@ -4,21 +4,22 @@
  */
 import BoltIcon from '@mui/icons-material/Bolt';
 import AcUnitIcon from '@mui/icons-material/AcUnit';
-import UmbrellaIcon from '@mui/icons-material/Umbrella';
 import CloudIcon from '@mui/icons-material/Cloud';
 import WbSunnyIcon from '@mui/icons-material/WbSunny';
+import WaterIcon from '@mui/icons-material/Water';
 
-export const weatherMeta = {
+// Meta data for weather types.
+const weatherMeta = {
     1: {
         description: "Oskväder",
-        bgColor: "bg-gradient-to-t from-blue-600  via-gray-300 to-gray-200",
+        bgColor: "bg-gradient-to-t from-blue-500 via-gray-600 via-gray-600 to-gray-700",
         icon: (
-            <BoltIcon />
+            <BoltIcon style={{fontSize: "36px" }} />
             )
         },
     2: {
         description: "Duggregn",
-        bgColor: "bg-gradient-to-t from-blue-300 via-gray-500 via-gray-500 to-gray-600",
+        bgColor: "bg-gradient-to-t from-blue-500 via-gray-500 to-gray-600",
         icon: (
             <CloudIcon className='h-full w-full' />
         )
@@ -30,31 +31,36 @@ export const weatherMeta = {
     },
     4: {
         description: "Snö",
-        bgColor: "bg-gradient-to-t from-blue-400 to-cyan-500",
-        icon: (<AcUnitIcon />)
+        bgColor: "bg-gradient-to-t from-blue-600 to-cyan-600",
+        icon: (<AcUnitIcon style={{fontSize: "36px" }}  />)
     },
     5: {
-        description: "Vet Ej",
-        bgColor: "bg-gradient-to-t from-blue-600 via-cyan-600 to-cyan-500",
-        icon: (<div className='text-3xl text-white'>☀️</div>) 
-        // (
-        //     <WbSunnyIcon className='text-yellow-300'/>
-        // )
+        description: "Oklart",
+        bgColor: "bg-gradient-to-t from-gray-500 to-gray-500",
+        icon: (<WaterIcon style={{fontSize: "36px" }}  />) 
     },
     6: {
         description: "Molnigt",
-        bgColor: "bg-gradient-to-t from-gray-500 to-gray-400",
+        bgColor: "bg-gradient-to-t from-gray-500 to-gray-500",
         icon: (<div className='text-3xl'>☁️</div>)
 
     },
     7: {
         description: "Klart",
-        bgColor: "bg-gradient-to-t from-blue-600 via-cyan-600 to-cyan-500",
+        bgColor: "bg-gradient-to-t from-blue-600 to-cyan-500",
         icon: (
             <WbSunnyIcon style={{fontSize: "36px" }} className='text-yellow-300'/>
         )
     }
 }
+
+// Extracts and capitializes the description of the weather.
+export const getWeatherDesc = (inputWeather) => {
+    const weather = inputWeather[0]
+    const desc = weather.description
+    return desc.charAt(0).toUpperCase() + desc.slice(1)
+}
+
 
 export const getWeatherData = (weatherType) => {
     return weatherMeta[weatherType]
@@ -63,18 +69,11 @@ export const getWeatherData = (weatherType) => {
 // Returns id of the weather type extracted from the supplied weather object. 
 export const getWeatherType = (inputWeather) => {
 
-    let weather = null 
-    // We pick the first weather if we get and array of weathers.
-    if(typeof(inputWeather) == Array)
-        weather = inputWeather
-    else
-        weather = inputWeather[0]
+    let weather = inputWeather[0]
 
     // The first number in the id is the type of weather.
     const firstNum = weather.id.toString().charAt(0)
     const type = parseInt(firstNum)
-    
-    console.log("weather ", firstNum);
 
     switch (type) {
 
