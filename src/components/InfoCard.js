@@ -1,8 +1,12 @@
+/*
+ * Container for a weather attribute. 
+ */
+
 import React from 'react'
 
 const InfoCard = ({ title, content }) => {
   return (
-    <div className='flex flex-col items-center bg-white text-slate-600 rounded-lg shadow-md m-2 lg:m-4 lg:w-40 lg:h-40 transition-all duration-150 scale-100 lg:hover:scale-105'>
+    <div className='flex flex-col items-center bg-white text-slate-600 rounded-lg shadow-md m-2 lg:m-4 lg:w-40 h-40 transition-all duration-150 scale-100 lg:hover:scale-105'>
         <h1 className='font-medium my-2'>
             {title ?  title : "Vind"}
         </h1>

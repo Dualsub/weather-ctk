@@ -24,11 +24,9 @@ function App() {
           setLoading(true)
           
           const url = `https://api.openweathermap.org/data/2.5/onecall?lat=${city.lat}&lon=${city.lon}&lang=sv&units=metric&exclude=minutely,alerts&appid=` + process.env.REACT_APP_API_KEY 
-          console.log(url);
           const response = await fetch(url)
           const data = await response.json()
-          setRawData(data)   
-          console.log(data); 
+          setRawData(data)
           
           const weatherType = getWeatherType(data.current.weather)
           const weatherMeta = getWeatherData(weatherType)
@@ -50,7 +48,7 @@ function App() {
       <div className="flex flex-col items-center h-full w-full max-w-6xl lg:mx-auto px-6">
         <div className="flex flex-col items-center w-full mt-4">
           <CitySelector city={city} setCity={setCity} />
-          <TodayForecast isLoading={isLoading} city={city} weatherData={rawData ? rawData.current : null}/>
+          <TodayForecast isLoading={isLoading} city={city ? city : null} weatherData={rawData ? rawData.current : null}/>
           <WeekForecast isLoading={isLoading} forecastData={rawData ? rawData.daily : null}/>
           <Footer />
         </div>

@@ -1,10 +1,10 @@
 /*
- * Kort där det står väderprognos för en spcifierad dag.
+ * Card that displays the weather forecast for a given day.
  */
 
 import React from 'react'
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
-import { getWeatherData, getWeatherType } from '../WeatherTypes';
+import { getWeatherData } from '../WeatherTypes';
 
 const ForecastCard = ({ day, date, temp, windSpeed, windAngle, weatherType }) => {
 

@@ -1,3 +1,7 @@
+/*
+ * Table of info cards with information about the current weather. 
+ */
+
 import React from 'react'
 import InfoCard from './InfoCard'
 import { getWeatherData } from '../WeatherTypes';
@@ -23,7 +27,7 @@ const getDirection = (angle) => {
     return directions[Math.round(angle / 45) % 8]
 }
 
-const InfoTable = ({ windSpeed, windAngle, sunrise, sunset, minTemp, maxTemp, feelTemp, visibility, weatherType, weatherDesc, humidity}) => {
+const InfoTable = ({ windSpeed, windAngle, sunrise, sunset, minTemp, maxTemp, feelTemp, visibility, weatherType, weatherDesc, humidity, dewPoint}) => {
 
     const rot = {
         transform: `rotate(${windAngle ? windAngle-90 : -90}deg)`,
@@ -145,7 +149,7 @@ const InfoTable = ({ windSpeed, windAngle, sunrise, sunset, minTemp, maxTemp, fe
         content={(
             <div className='w-full flex flex-col justify-center items-center'>
                 <h1 className='text-2xl mt-4'>{humidity ? Math.round(humidity) : 0}%</h1>
-                <h1 className='text-sm text-slate-400'>({visibility ? visibility : 0} m)</h1>
+                <h1 className='text-sm text-slate-400'>Daggpunkt: {dewPoint ? dewPoint : 0} &deg;</h1>
             </div>
         )}/>
       </div>

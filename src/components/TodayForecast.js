@@ -1,10 +1,9 @@
 /*
- * Component that displays the weather currently in the specified city. Also changes background color of its parent component, App.
+ * Component that displays the weather currently in the specified city.
  */
 
 import React, { useState } from 'react'
 import { getWeatherDesc, getWeatherType } from '../WeatherTypes';
-import { CircularProgress } from '@mui/material';
 import InfoTable from './InfoTable';
 import Error from '@mui/icons-material/Error';
 
@@ -25,9 +24,6 @@ const tableDefaults = {
 
 const TodayForecast = ({city, weatherData, isLoading }) => {
 
-  const [hasError, setHasError] = useState(false)
-
-  
   if(!weatherData && !isLoading)
   {
     
@@ -63,7 +59,8 @@ const TodayForecast = ({city, weatherData, isLoading }) => {
     weatherDesc: getWeatherDesc(weatherData.weather),
     weatherType: weatherType,
 
-    humidity: weatherData.humidity
+    humidity: weatherData.humidity,
+    dewPoint: Math.round(weatherData.dew_point) 
   } : tableDefaults
 
   return (
