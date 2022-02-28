@@ -1,6 +1,6 @@
 # Weather CTK ⛅
 
-Simple react web application for displaying weather forecasts. A deployed version of the site can be found here [here](https://dualsub.github.io/weather-ctk).
+Simple react web application for displaying weather forecasts. A deployed version of the site can be found [here](https://dualsub.github.io/weather-ctk).
 
 ## Running
 
