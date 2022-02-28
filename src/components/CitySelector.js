@@ -8,19 +8,20 @@ const CitySelector = ({ city, setCity }) => {
     return (
     <div className='w-full'>
         <Autocomplete
+        value={city}
         className='w-full'
         id="city-selector"
-        options={cities.map((city) => city.name)}
+        options={cities}
+        getOptionLabel={(option) => `${option.name}, ${option.country}`}
         renderInput={(params) => (
           <div ref={params.InputProps.ref} className="flex bg-white rounded-lg shadow-md flex-row items-center focus:outline-1 mb-4 mt-12">
-            <Search className='m-2'/>
+            <Search className='my-2 mx-4'/>
             <input type="text" {...params.inputProps} className='w-full px-4 py-6 h-8 focus:outline-none bg-transparent'/>
           </div>
         )}
         onChange={(event, newValue) => {
-            const newCity = cities.find((c) => c.name === newValue)
             console.log(newValue);
-            setCity(newCity)
+            setCity(newValue)
         }}
       />
     </div>

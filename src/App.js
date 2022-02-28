@@ -10,8 +10,6 @@ import { cities } from "./cities";
 import Footer from "./components/Footer";
 import { getWeatherType, getWeatherData } from "./WeatherTypes";
 
-const DEFAULT_BACKGROUND = "bg-blue-600"
-
 function App() {
   // The city that the weather is shown for.
   const [city, setCity] = useState(cities[0])
