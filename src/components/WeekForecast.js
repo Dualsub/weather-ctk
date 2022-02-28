@@ -2,8 +2,7 @@
  * List of Forecast cards for the next 5 days. 
  */
 
-
-import React, { useState } from 'react'
+import React from 'react'
 import { CircularProgress } from '@mui/material'
 import ForecastCard from './ForecastCard'
 import { getWeatherType } from '../WeatherTypes'
@@ -40,7 +39,7 @@ const numForecastDays = 5
 const WeekForecast = ({ forecastData, isLoading }) => {
     
     // Here we clean the data for the ForecastCard component to use.    
-    let cleanedForecastData = null
+    let cleanedForecastData = []
 
     try {
         cleanedForecastData = forecastData ? forecastData.slice(1, numForecastDays+1).map((rawDayData) => {
@@ -79,12 +78,24 @@ const WeekForecast = ({ forecastData, isLoading }) => {
             <DateRangeIcon className='mx-4'/>
             {numForecastDays}-dagarsprognos
         </h2>
-        <div className='flex lg:flex-row flex-col overflow-x-scroll overflow-y-hidden lg:overflow-visible w-full justify-between'>
-        {(cleanedForecastData && !isLoading) ? cleanedForecastData.map((dayData, index) => (
-            <ForecastCard key={index} {...dayData} />
-        )) : (<CircularProgress className="self-center"/>)
-        // ({cleanedForecastData ? (<CircularProgress className="self-center"/>) : (<CircularProgress className="self-center"/>)})
-        }
+        <div className='flex lg:flex-row flex-col overflow-x-scroll overflow-y-hidden lg:overflow-visible w-full justify-between text-gray-600'>
+        {(() => {
+            if(cleanedForecastData && !isLoading) {
+                return (<>
+                    {cleanedForecastData.map((dayData, index) => (<ForecastCard key={index} {...dayData} />))}
+                </>
+                )
+            }
+            else if(isLoading) {
+                return (<CircularProgress style={{color:"grey"}} className="text-gray-600 mx-auto"/>)
+            }
+            else {
+                return (<div className='mx-auto flex flex-col items-center'>
+                    <Error />
+                    <p>Något gick fel.</p>
+                </div>)
+            }
+        })()}
         </div>
     </div>
   )

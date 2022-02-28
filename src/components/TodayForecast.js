@@ -2,7 +2,7 @@
  * Component that displays the weather currently in the specified city.
  */
 
-import React, { useState } from 'react'
+import React from 'react'
 import { getWeatherDesc, getWeatherType } from '../WeatherTypes';
 import InfoTable from './InfoTable';
 import Error from '@mui/icons-material/Error';
@@ -74,7 +74,7 @@ const TodayForecast = ({city, weatherData, isLoading }) => {
             {city && !isLoading ? city.country : ""}
           </h3>
           <h1 className='text-7xl font-medium my-4'>
-            {temp && !isLoading ? temp : 0}&deg;
+          &nbsp;{temp && !isLoading ? temp : 0}&deg;
           </h1>          
         </div>
         <div className='m-2'>

@@ -15,7 +15,6 @@ function App() {
   const [city, setCity] = useState(cities[0])
   const [background, setBackground] = useState(getWeatherData(7).bgColor)  
   const [rawData, setRawData] = useState(null)
-  const [hasError, setHasError] = useState(false)
   const [isLoading, setLoading] = useState(false)
 
   // Here we do the api call to the weather api.
@@ -38,7 +37,8 @@ function App() {
 
       fetchData()
       .catch((error) => {
-          setHasError(true)
+          // If there is an error the data will be null and the components will render defaults or errors if the data is null.
+          setLoading(false)
           console.log(error);
       });
   }, [city])

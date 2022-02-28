@@ -4,7 +4,7 @@ Simple react web application for displaying weather forecasts. A deployed versio
 
 ## Running
 
-To run the project run the following commands:
+To run the project, execute the following commands in the terminal:
 ```bat
 git clone https://github.com/Dualsub/weather-ctk.git weather-ctk
 cd weather-ctk

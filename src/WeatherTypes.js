@@ -93,7 +93,7 @@ export const getWeatherType = (inputWeather) => {
                 return 7;
             else
                 return 6;
+        default:
+            return null;
     }
-
-    return null;
 } 
